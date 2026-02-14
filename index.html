@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Submission</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #e8f0ff;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 520px;
+            background: white;
+            padding: 30px;
+            margin: auto;
+            border-radius: 14px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.15);
+        }
+
+        h2 {
+            text-align: center;
+            color: #0a3d62;
+            margin-bottom: 25px;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+            color: #333;
+        }
+
+        input[type="text"], 
+        input[type="url"], 
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #bbb;
+            margin-top: 5px;
+            background: #f9fbff;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 25px;
+            background: #0a3d62;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #07324f;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Project Submission Form</h2>
+
+    <form id="submitForm">
+        <label>College Name</label>
+        <input type="text" id="collegeName" placeholder="Enter College Name" required>
+
+        <label>Team Name</label>
+        <input type="text" id="teamName" placeholder="Enter Team Name" required>
+
+        <label>PowerPoint File (PPT / PPTX)</label>
+        <input type="file" id="pptFile" accept=".ppt,.pptx" required>
+
+        <label>GitHub Live Link</label>
+        <input type="url" id="githubLink" placeholder="https://yourproject.github.io" required>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+
+<script>
+document.getElementById("submitForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxvqRJWNA5UQOPkALyNEYjKOLJ155TtZviclfI0PZAbHOwz0mykzW2gjnyk6XbhSMg/exec";
+
+    let formData = new FormData();
+    formData.append("collegeName", document.getElementById("collegeName").value);
+    formData.append("teamName", document.getElementById("teamName").value);
+    formData.append("githubLink", document.getElementById("githubLink").value);
+
+    let fileInput = document.getElementById("pptFile");
+    if (fileInput.files.length === 0) {
+        alert("Please upload a file.");
+        return;
+    }
+    formData.append("pptFile", fileInput.files[0]);
+
+    const response = await fetch(scriptURL, {
+        method: "POST",
+        body: formData
+    });
+
+    if (response.ok) {
+        alert("Submitted successfully!");
+        document.getElementById("submitForm").reset();
+    } else {
+        alert("Error! Please try again.");
+    }
+});
+</script>
+
+</body>
+</html>
