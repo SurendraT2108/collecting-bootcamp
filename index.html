@@ -7,25 +7,24 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #e8f0ff;
+            background: #eef3ff;
             padding: 40px;
         }
 
         .container {
-            max-width: 520px;
+            max-width: 500px;
             background: white;
-            padding: 30px;
+            padding: 25px;
             margin: auto;
-            border-radius: 14px;
+            border-radius: 12px;
             box-shadow: 0 0 15px rgba(0,0,0,0.15);
         }
 
         h2 {
             text-align: center;
-            color: #0a3d62;
+            color: #222;
             margin-bottom: 25px;
             font-size: 26px;
-            font-weight: bold;
         }
 
         label {
@@ -35,63 +34,60 @@
             color: #333;
         }
 
-        input[type="text"], 
-        input[type="url"], 
-        input[type="file"] {
+        input[type="text"], input[type="url"], input[type="file"] {
             width: 100%;
             padding: 10px;
             border-radius: 6px;
             border: 1px solid #bbb;
             margin-top: 5px;
-            background: #f9fbff;
         }
 
         button {
             width: 100%;
             padding: 12px;
-            margin-top: 25px;
-            background: #0a3d62;
+            margin-top: 20px;
+            background: #0055ff;
             border: none;
             color: white;
             border-radius: 6px;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             font-weight: bold;
         }
 
         button:hover {
-            background: #07324f;
+            background: #003bcc;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Project Submission Form</h2>
+    <h2>Project Submission</h2>
 
     <form id="submitForm">
         <label>College Name</label>
-        <input type="text" id="collegeName" placeholder="Enter College Name" required>
+        <input type="text" id="collegeName" required>
 
         <label>Team Name</label>
-        <input type="text" id="teamName" placeholder="Enter Team Name" required>
+        <input type="text" id="teamName" required>
 
         <label>PowerPoint File (PPT / PPTX)</label>
         <input type="file" id="pptFile" accept=".ppt,.pptx" required>
 
         <label>GitHub Live Link</label>
-        <input type="url" id="githubLink" placeholder="https://yourproject.github.io" required>
+        <input type="url" id="githubLink" required>
 
         <button type="submit">Submit</button>
     </form>
 </div>
 
-
 <script>
 document.getElementById("submitForm").addEventListener("submit", async function(e) {
     e.preventDefault();
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbxvqRJWNA5UQOPkALyNEYjKOLJ155TtZviclfI0PZAbHOwz0mykzW2gjnyk6XbhSMg/exec";
+    // YOUR FINAL WORKING GOOGLE SCRIPT URL
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzk6Ro6-T25FtGRrcaO0WfLzT82asmXQVGUsACFdl5VoVUrFNVE9426C0FPv2J9SXc/exec";
 
     let formData = new FormData();
     formData.append("collegeName", document.getElementById("collegeName").value);
@@ -99,11 +95,15 @@ document.getElementById("submitForm").addEventListener("submit", async function(
     formData.append("githubLink", document.getElementById("githubLink").value);
 
     let fileInput = document.getElementById("pptFile");
-    if (fileInput.files.length === 0) {
-        alert("Please upload a file.");
+    let file = fileInput.files[0];
+
+    if (!file) {
+        alert("Please upload a PPT file.");
         return;
     }
-    formData.append("pptFile", fileInput.files[0]);
+
+    formData.append("fileName", file.name);
+    formData.append("pptFile", file);
 
     const response = await fetch(scriptURL, {
         method: "POST",
